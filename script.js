@@ -37,6 +37,70 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             priceTable.appendChild(tr);
         });
+
+        // Render Trend Chart
+        if (data.trends && data.trends.length > 0) {
+            const ctx = document.getElementById('trend-chart').getContext('2d');
+            
+            // Labels are dates from the first brand's data
+            const labels = data.trends[0].data.map(item => item[0]);
+            
+            // Define brand colors
+            const brandColors = {
+                'Esso': '#d32f2f',
+                'Shell': '#fbc02d',
+                'SPC': '#1976d2',
+                'Caltex': '#388e3c',
+                'Sinopec': '#e64a19'
+            };
+
+            const datasets = data.trends.map(brand => ({
+                label: brand.name,
+                data: brand.data.map(item => item[1]),
+                borderColor: brandColors[brand.name] || '#666',
+                backgroundColor: 'transparent',
+                tension: 0.3,
+                pointRadius: 2
+            }));
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: { size: 10 }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Price (S$)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45,
+                                font: { size: 9 },
+                                autoSkip: true,
+                                maxTicksLimit: 12
+                            }
+                        }
+                    }
+                }
+            });
+        }
     } catch (error) {
         console.error('Error loading prices:', error);
         document.getElementById('updated-date').textContent = 'Error loading data. Please try again later.';

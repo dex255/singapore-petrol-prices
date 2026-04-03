@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div id="petrol-widget" class="petrol-widget">
@@ -46,6 +47,12 @@
                     <!-- Data will be injected here -->
                 </tbody>
             </table>
+        </div>
+        <div class="chart-section">
+            <h2>Fuel Prices Trend (95 Octane)</h2>
+            <div class="chart-container">
+                <canvas id="trend-chart"></canvas>
+            </div>
         </div>
         <div class="seo-content">
             <h2>About Singapore Petrol Prices</h2>

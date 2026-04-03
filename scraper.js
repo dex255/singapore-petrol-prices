@@ -48,9 +48,31 @@ async function scrapePetrolPrices() {
             });
         });
 
-        if (data.prices.length === 0) {
-            throw new Error('No prices extracted');
+        // Extract trend data from script
+        const scripts = doc.querySelectorAll('script');
+        let trendData = null;
+        for (const script of scripts) {
+            const content = script.textContent;
+            if (content.includes('Chartkick["LineChart"]')) {
+                const match = content.match(/new Chartkick\["LineChart"\]\s*\(\s*["']chart-1["']\s*,\s*(\[.*?\])\s*,\s*\{/s);
+                if (match && match[1]) {
+                    try {
+                        // The data is almost JSON but might have single quotes or unquoted keys
+                        // We use a safe-ish evaluation or a more robust regex-based fix
+                        // For simplicity, we'll try a basic fix for single quotes
+                        const jsonStr = match[1].replace(/'/g, '"');
+                        trendData = JSON.parse(jsonStr);
+                    } catch (e) {
+                        console.warn('Failed to parse trend data strictly:', e.message);
+                        // Fallback: try to capture the raw string if parsing fails
+                        trendData = match[1];
+                    }
+                }
+                break;
+            }
         }
+
+        data.trends = trendData;
 
         fs.writeFileSync('prices.json', JSON.stringify(data, null, 2));
         console.log('Prices saved to prices.json');
