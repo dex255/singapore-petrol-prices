@@ -48,34 +48,50 @@ async function scrapePetrolPrices() {
             });
         });
 
-        // Extract trend data from script
-        const scripts = doc.querySelectorAll('script');
-        let trendData = null;
-        for (const script of scripts) {
-            const content = script.textContent;
-            if (content.includes('Chartkick["LineChart"]')) {
-                const match = content.match(/new Chartkick\["LineChart"\]\s*\(\s*["']chart-1["']\s*,\s*(\[.*?\])\s*,\s*\{/s);
-                if (match && match[1]) {
-                    try {
-                        // The data is almost JSON but might have single quotes or unquoted keys
-                        // We use a safe-ish evaluation or a more robust regex-based fix
-                        // For simplicity, we'll try a basic fix for single quotes
-                        const jsonStr = match[1].replace(/'/g, '"');
-                        trendData = JSON.parse(jsonStr);
-                    } catch (e) {
-                        console.warn('Failed to parse trend data strictly:', e.message);
-                        // Fallback: try to capture the raw string if parsing fails
-                        trendData = match[1];
+        // Extraction helper
+        function extractTrendData(htmlContent) {
+            const tempDoc = new JSDOM(htmlContent).window.document;
+            const scriptsArr = tempDoc.querySelectorAll('script');
+            for (const script of scriptsArr) {
+                const content = script.textContent;
+                if (content.includes('Chartkick["LineChart"]')) {
+                    const match = content.match(/new Chartkick\["LineChart"\]\s*\(\s*["']chart-1["']\s*,\s*(\[.*?\])\s*,\s*\{/s);
+                    if (match && match[1]) {
+                        try {
+                            const jsonStr = match[1].replace(/'/g, '"');
+                            return JSON.parse(jsonStr);
+                        } catch (e) {
+                            return match[1];
+                        }
                     }
                 }
-                break;
+            }
+            return null;
+        }
+
+        // Fetch all trends
+        const grades = ['92', '95', '98', 'premium', 'diesel'];
+        data.trends = {};
+        
+        for (const grade of grades) {
+            console.log(`Fetching trend for ${grade}...`);
+            try {
+                // We add random sleep to be nice
+                await new Promise(r => setTimeout(r, 1000 + Math.random() * 1000));
+                const url = `https://www.motorist.sg/petrol-prices?grade=${grade}&date_range=6`;
+                const gRes = await fetch(url, {
+                    headers: { 'User-Agent': 'Mozilla/5.0' }
+                });
+                const gHtml = await gRes.text();
+                data.trends[grade] = extractTrendData(gHtml);
+                console.log(`Successfully fetched trend for ${grade}`);
+            } catch (err) {
+                console.error(`Failed to fetch trend for ${grade}:`, err.message);
             }
         }
 
-        data.trends = trendData;
-
         fs.writeFileSync('prices.json', JSON.stringify(data, null, 2));
-        console.log('Prices saved to prices.json');
+        console.log('Prices and trends saved to prices.json');
         console.log('Count:', data.prices.length);
     } catch (error) {
         console.error('Scraper Error:', error.message);
