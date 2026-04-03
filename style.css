@@ -60,6 +60,16 @@ th {
   text-transform: uppercase;
   color: var(--text-muted);
   border-bottom: 2px solid var(--border-color);
+  vertical-align: bottom;
+}
+
+.brand-logo {
+  display: block;
+  margin: 0 auto 8px;
+  height: 24px;
+  width: auto;
+  max-width: 50px;
+  opacity: 1; /* Match header text or keep full color */
 }
 
 td {
