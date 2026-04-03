@@ -65,11 +65,17 @@ th {
 
 .brand-logo {
   display: block;
-  margin: 0 auto 8px;
+  margin: 0 auto 6px;
+  width: 48px;
   height: 24px;
-  width: auto;
-  max-width: 50px;
-  opacity: 1; /* Match header text or keep full color */
+  object-fit: contain;
+  opacity: 1;
+}
+
+.brand-name {
+  display: block;
+  font-size: 0.7rem;
+  line-height: 1.2;
 }
 
 td {
