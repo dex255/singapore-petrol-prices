@@ -1,0 +1,45 @@
+{
+  "updatedAt": "2026-04-03T13:47:50.295Z",
+  "prices": [
+    {
+      "grade": "92",
+      "Esso": "$3.38",
+      "Shell": null,
+      "SPC": "$3.43",
+      "Caltex": "$3.43",
+      "Sinopec": null
+    },
+    {
+      "grade": "95",
+      "Esso": "$3.42",
+      "Shell": "$3.46",
+      "SPC": "$3.46",
+      "Caltex": "$3.47",
+      "Sinopec": "$3.47"
+    },
+    {
+      "grade": "98",
+      "Esso": "$3.92",
+      "Shell": "$3.98",
+      "SPC": "$3.97",
+      "Caltex": null,
+      "Sinopec": "$3.97"
+    },
+    {
+      "grade": "Premium",
+      "Esso": null,
+      "Shell": "$4.20",
+      "SPC": null,
+      "Caltex": "$4.16",
+      "Sinopec": "$4.10"
+    },
+    {
+      "grade": "Diesel",
+      "Esso": "$4.23",
+      "Shell": "$4.43",
+      "SPC": "$4.12",
+      "Caltex": "$4.43",
+      "Sinopec": "$4.23"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+name: Update Petrol Prices
+
+on:
+  schedule:
+    - cron: '0 0,12 * * *' # Every day at midnight and noon (UTC)
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  update-prices:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run scraper
+        run: node scraper.js
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add prices.json
+          git commit -m "Update petrol prices at $(date)" || echo "No changes to commit"
+          git push
