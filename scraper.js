@@ -49,21 +49,19 @@ async function scrapePetrolPrices() {
         });
 
         // Extraction helper
-        function extractTrendData(htmlContent) {
-            const tempDoc = new JSDOM(htmlContent).window.document;
-            const scriptsArr = tempDoc.querySelectorAll('script');
-            for (const script of scriptsArr) {
-                const content = script.textContent;
-                if (content.includes('Chartkick["LineChart"]')) {
-                    const match = content.match(/new Chartkick\["LineChart"\]\s*\(\s*["']chart-1["']\s*,\s*(\[.*?\])\s*,\s*\{/s);
-                    if (match && match[1]) {
-                        try {
-                            const jsonStr = match[1].replace(/'/g, '"');
-                            return JSON.parse(jsonStr);
-                        } catch (e) {
-                            return match[1];
-                        }
-                    }
+        function extractTrendData(content) {
+            // Updated regex to be more flexible (handles escaped quotes in AJAX responses)
+            const match = content.match(/new Chartkick\[.*?LineChart.*?\]\s*\(\s*.*?chart-1.*?\s*,\s*(\[.*?\])\s*,\s*\{/s);
+            if (match && match[1]) {
+                try {
+                    // Remove escaping backslashes if present
+                    let cleaned = match[1].replace(/\\"/g, '"').replace(/\\'/g, "'");
+                    // Still fix single quotes to double quotes for JSON.parse
+                    cleaned = cleaned.replace(/'/g, '"');
+                    return JSON.parse(cleaned);
+                } catch (e) {
+                    console.warn('Strict JS parse failed, returning raw string');
+                    return match[1];
                 }
             }
             return null;
@@ -74,17 +72,23 @@ async function scrapePetrolPrices() {
         data.trends = {};
         
         for (const grade of grades) {
-            console.log(`Fetching trend for ${grade}...`);
+            console.log(`Fetching trend via AJAX for ${grade}...`);
             try {
-                // We add random sleep to be nice
+                // Sleep to avoid rate limiting
                 await new Promise(r => setTimeout(r, 1000 + Math.random() * 1000));
+                
+                // Using AJAX headers to ensure we get the unique data for each grade
                 const url = `https://www.motorist.sg/petrol-prices?grade=${grade}&date_range=6`;
                 const gRes = await fetch(url, {
-                    headers: { 'User-Agent': 'Mozilla/5.0' }
+                    headers: { 
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                        'Accept': 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
                 });
-                const gHtml = await gRes.text();
-                data.trends[grade] = extractTrendData(gHtml);
-                console.log(`Successfully fetched trend for ${grade}`);
+                const gContent = await gRes.text();
+                data.trends[grade] = extractTrendData(gContent);
+                console.log(`Successfully fetched trend for ${grade} (${(data.trends[grade] ? 'Found' : 'Missing')})`);
             } catch (err) {
                 console.error(`Failed to fetch trend for ${grade}:`, err.message);
             }
