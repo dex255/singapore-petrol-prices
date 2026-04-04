@@ -247,7 +247,7 @@ input:checked + .slider:before {
   border-radius: var(--radius-sm);
   padding: 12px;
   position: absolute;
-  z-index: 100;
+  z-index: 9999;
   bottom: 125%;
   left: 50%;
   transform: translateX(-50%);
