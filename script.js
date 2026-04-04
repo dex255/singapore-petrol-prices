@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (data.trends) {
             let currentChart = null;
             let currentGrade = '95';
-            let currentRange = 900; // Default: 30 Months (All)
+            let currentRange = 90; // Default: 3 MONTHS
             const ctx = document.getElementById('trend-chart').getContext('2d');
             
             const brandColors = {
@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             };
 
             // Initial chart
-            updateTrendChart('95', 900);
+            updateTrendChart('95', 90);
 
             // Hook up filter dropdowns
             const gradeSelect = document.getElementById('grade-select');

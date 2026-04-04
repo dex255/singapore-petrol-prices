@@ -94,8 +94,21 @@ async function scrapePetrolPrices() {
             }
         }
 
+        const date = new Date(data.updatedAt);
+        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        
         fs.writeFileSync('prices.json', JSON.stringify(data, null, 2));
         console.log('Prices and trends saved to prices.json');
+
+        // Update index.html with the last updated date for SEO/Initial Load
+        const indexHtml = fs.readFileSync('index.html', 'utf8');
+        const updatedIndexHtml = indexHtml.replace(
+            /<p id="updated-date">.*?<\/p>/,
+            `<p id="updated-date">Last updated: ${date.toLocaleDateString('en-SG', options)}</p>`
+        );
+        fs.writeFileSync('index.html', updatedIndexHtml);
+        console.log('index.html updated with latest date');
+
         console.log('Count:', data.prices.length);
     } catch (error) {
         console.error('Scraper Error:', error.message);
