@@ -14,8 +14,17 @@
 <body>
     <div id="petrol-widget" class="petrol-widget">
         <div class="widget-header">
-            <h1>Compare Pump Prices</h1>
-            <p id="updated-date">Loading data...</p>
+            <div class="header-main">
+                <h1>Compare Pump Prices</h1>
+                <p id="updated-date">Loading data...</p>
+            </div>
+            <div class="loyalty-controls">
+                <span class="loyalty-label">Compare with Loyalty Discounts</span>
+                <label class="switch">
+                    <input type="checkbox" id="loyalty-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
         </div>
         <div class="table-container">
             <table id="price-table">
