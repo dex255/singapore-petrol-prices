@@ -267,23 +267,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Initial chart
             updateTrendChart('95', 900);
 
-            // Hook up filter buttons
-            const gradeButtons = document.querySelectorAll('#grade-filters .filter-btn');
-            gradeButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    gradeButtons.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    updateTrendChart(btn.dataset.grade, currentRange);
-                });
+            // Hook up filter dropdowns
+            const gradeSelect = document.getElementById('grade-select');
+            const rangeSelect = document.getElementById('range-select');
+
+            gradeSelect.addEventListener('change', (e) => {
+                updateTrendChart(e.target.value, currentRange);
             });
 
-            const rangeButtons = document.querySelectorAll('#range-filters .range-btn');
-            rangeButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    rangeButtons.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    updateTrendChart(currentGrade, parseInt(btn.dataset.range));
-                });
+            rangeSelect.addEventListener('change', (e) => {
+                updateTrendChart(currentGrade, parseInt(e.target.value));
             });
         }
     } catch (error) {

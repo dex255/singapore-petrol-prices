@@ -63,18 +63,24 @@
             <div class="chart-header">
                 <h2>Fuel Prices Trend</h2>
                 <div class="chart-controls">
-                    <div class="trend-filters" id="grade-filters">
-                        <button class="filter-btn active" data-grade="95">95</button>
-                        <button class="filter-btn" data-grade="92">92</button>
-                        <button class="filter-btn" data-grade="98">98</button>
-                        <button class="filter-btn" data-grade="premium">Premium</button>
-                        <button class="filter-btn" data-grade="diesel">Diesel</button>
+                    <div class="control-group">
+                        <label for="grade-select" class="control-label">Fuel Grade:</label>
+                        <select id="grade-select" class="chart-dropdown">
+                            <option value="95">95 Octane</option>
+                            <option value="92">92 Octane</option>
+                            <option value="98">98 Octane</option>
+                            <option value="premium">Premium</option>
+                            <option value="diesel">Diesel</option>
+                        </select>
                     </div>
-                    <div class="range-filters" id="range-filters">
-                        <button class="range-btn" data-range="7">7 Days</button>
-                        <button class="range-btn" data-range="90">3 Months</button>
-                        <button class="range-btn" data-range="365">12 Months</button>
-                        <button class="range-btn active" data-range="900">30 Months</button>
+                    <div class="control-group">
+                        <label for="range-select" class="control-label">Time Horizon:</label>
+                        <select id="range-select" class="chart-dropdown">
+                            <option value="7">Past 7 Days</option>
+                            <option value="90" selected>Past 3 Months</option>
+                            <option value="365">Past 12 Months</option>
+                            <option value="900">Historical (30 Months)</option>
+                        </select>
                     </div>
                 </div>
             </div>
