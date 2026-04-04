@@ -62,12 +62,20 @@
         <div class="chart-section">
             <div class="chart-header">
                 <h2>Fuel Prices Trend</h2>
-                <div class="trend-filters" id="trend-filters">
-                    <button class="filter-btn active" data-grade="95">95</button>
-                    <button class="filter-btn" data-grade="92">92</button>
-                    <button class="filter-btn" data-grade="98">98</button>
-                    <button class="filter-btn" data-grade="premium">Premium</button>
-                    <button class="filter-btn" data-grade="diesel">Diesel</button>
+                <div class="chart-controls">
+                    <div class="trend-filters" id="grade-filters">
+                        <button class="filter-btn active" data-grade="95">95</button>
+                        <button class="filter-btn" data-grade="92">92</button>
+                        <button class="filter-btn" data-grade="98">98</button>
+                        <button class="filter-btn" data-grade="premium">Premium</button>
+                        <button class="filter-btn" data-grade="diesel">Diesel</button>
+                    </div>
+                    <div class="range-filters" id="range-filters">
+                        <button class="range-btn" data-range="7">7 Days</button>
+                        <button class="range-btn" data-range="90">3 Months</button>
+                        <button class="range-btn" data-range="365">12 Months</button>
+                        <button class="range-btn active" data-range="900">30 Months</button>
+                    </div>
                 </div>
             </div>
             <div class="chart-container">

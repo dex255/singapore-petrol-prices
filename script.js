@@ -174,6 +174,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Render Trend Chart
         if (data.trends) {
             let currentChart = null;
+            let currentGrade = '95';
+            let currentRange = 900; // Default: 30 Months (All)
             const ctx = document.getElementById('trend-chart').getContext('2d');
             
             const brandColors = {
@@ -184,22 +186,43 @@ document.addEventListener('DOMContentLoaded', async () => {
                 'Sinopec': '#e64a19'
             };
 
-            const updateTrendChart = (grade) => {
-                const trendData = data.trends[grade];
+            const updateTrendChart = (grade, days) => {
+                currentGrade = grade || currentGrade;
+                currentRange = days || currentRange;
+
+                const trendData = JSON.parse(JSON.stringify(data.trends[currentGrade])); // Deep copy
                 if (!trendData || trendData.length === 0) return;
+
+                // Filter data by days
+                const cutoffDate = new Date();
+                cutoffDate.setDate(cutoffDate.getDate() - currentRange);
+
+                trendData.forEach(brand => {
+                    brand.data = brand.data.filter(item => {
+                        const itemDate = new Date(item[0]);
+                        return itemDate >= cutoffDate;
+                    });
+                });
+
+                // Remove brands with no data in range
+                const filteredTrendData = trendData.filter(brand => brand.data.length > 0);
+                if (filteredTrendData.length === 0) {
+                    if (currentChart) currentChart.destroy();
+                    return;
+                }
 
                 if (currentChart) {
                     currentChart.destroy();
                 }
 
-                const labels = trendData[0].data.map(item => item[0]);
-                const datasets = trendData.map(brand => ({
+                const labels = filteredTrendData[0].data.map(item => item[0]);
+                const datasets = filteredTrendData.map(brand => ({
                     label: brand.name,
                     data: brand.data.map(item => item[1]),
                     borderColor: brandColors[brand.name] || '#666',
                     backgroundColor: 'transparent',
                     tension: 0.3,
-                    pointRadius: 2
+                    pointRadius: filteredTrendData[0].data.length > 30 ? 0 : 3
                 }));
 
                 currentChart = new Chart(ctx, {
@@ -224,7 +247,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         scales: {
                             y: {
                                 beginAtZero: false,
-                                title: { display: true, text: 'Price (S$)' }
+                                title: { display: true, text: 'Price (S$)', font: { size: 10 } },
+                                ticks: { font: { size: 10 } }
                             },
                             x: {
                                 ticks: {
@@ -241,15 +265,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             };
 
             // Initial chart
-            updateTrendChart('95');
+            updateTrendChart('95', 900);
 
             // Hook up filter buttons
-            const buttons = document.querySelectorAll('.filter-btn');
-            buttons.forEach(btn => {
+            const gradeButtons = document.querySelectorAll('#grade-filters .filter-btn');
+            gradeButtons.forEach(btn => {
                 btn.addEventListener('click', () => {
-                    buttons.forEach(b => b.classList.remove('active'));
+                    gradeButtons.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    updateTrendChart(btn.dataset.grade);
+                    updateTrendChart(btn.dataset.grade, currentRange);
+                });
+            });
+
+            const rangeButtons = document.querySelectorAll('#range-filters .range-btn');
+            rangeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    rangeButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    updateTrendChart(currentGrade, parseInt(btn.dataset.range));
                 });
             });
         }
