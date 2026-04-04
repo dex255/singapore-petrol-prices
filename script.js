@@ -7,12 +7,37 @@ document.addEventListener('DOMContentLoaded', async () => {
         const updatedDate = document.getElementById('updated-date');
         const loyaltyToggle = document.getElementById('loyalty-toggle');
 
-        const loyaltyPrograms = {
-            'Esso': { discount: 0.04, label: 'Smiles Rewards' },
-            'Shell': { discount: 0.02, label: 'Shell GO+' },
-            'SPC': { discount: 0.03, label: 'Member Rewards' },
-            'Caltex': { discount: 0.02, label: 'Linkpoints' },
-            'Sinopec': { discount: 0.033, label: 'X Card' }
+        const getLoyaltyDiscount = (brand, grade, originalPrice) => {
+            const gradesLower = grade.toLowerCase();
+            const isPremium = gradesLower.includes('premium') || gradesLower.includes('98');
+
+            switch (brand) {
+                case 'Esso':
+                    return 0.04; // Best rate: 750 pts = $30 ($0.04/L)
+                case 'Shell':
+                    // 1.2 pts for Premium/98, 1 pt for FuelSave
+                    // 300 pts = $10 ($0.033/pt)
+                    return isPremium ? (1.2 * 0.0333) : (1 * 0.0333);
+                case 'Caltex':
+                    return 0.02; // 2 Linkpoints / L, 100 pts = $1
+                case 'Sinopec':
+                    // 1.5 pts for Premium/98, 1 pt for others
+                    // 90 pts = $3 ($0.033/pt)
+                    return isPremium ? (1.5 * 0.0333) : (1 * 0.0333);
+                case 'SPC':
+                    // SPC&U/SPC+ focus on coupons (e.g. $5 off $60 which is ~8.3% off)
+                    return originalPrice ? (originalPrice * (5 / 60)) : 0.28;
+                default:
+                    return 0;
+            }
+        };
+
+        const loyaltyLabels = {
+            'Esso': 'Smiles Points',
+            'Shell': 'Shell GO+ Pts',
+            'SPC': 'SPC&U Coupon',
+            'Caltex': 'Link Rewards',
+            'Sinopec': 'X Card Pts'
         };
 
         // Formatted date string
@@ -44,8 +69,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (isNaN(originalPrice)) return { brand, original: NaN, display: NaN, isNull: true };
                     
                     let displayPrice = originalPrice;
-                    if (isLoyaltyEnabled && loyaltyPrograms[brand]) {
-                        displayPrice = originalPrice - loyaltyPrograms[brand].discount;
+                    if (isLoyaltyEnabled) {
+                        const discount = getLoyaltyDiscount(brand, row.grade, originalPrice);
+                        displayPrice = originalPrice - discount;
                     }
                     
                     return { brand, original: originalPrice, display: parseFloat(displayPrice.toFixed(3)), isNull: false };
@@ -54,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const validDisplayPrices = processedPrices.filter(p => !p.isNull).map(p => p.display);
                 const minPrice = validDisplayPrices.length > 0 ? Math.min(...validDisplayPrices) : null;
 
-                processedPrices.forEach(p => {
+                processedPrices.forEach((p, idx) => {
                     const td = document.createElement('td');
                     
                     if (p.isNull) {
@@ -79,7 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                             const infoEl = document.createElement('div');
                             infoEl.classList.add('loyalty-discount-info');
-                            infoEl.textContent = loyaltyPrograms[p.brand].label;
+                            infoEl.textContent = loyaltyLabels[p.brand];
                             container.appendChild(infoEl);
                         }
 
