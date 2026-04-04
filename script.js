@@ -40,6 +40,34 @@ document.addEventListener('DOMContentLoaded', async () => {
             'Sinopec': 'X Card Pts'
         };
 
+        const loyaltyProgramDetails = {
+            'Esso': {
+                name: 'Smiles Rewards',
+                earn: '1 Smiles Point per litre',
+                redeem: 'Instant fuel: 300 pts ($10), 750 pts ($30)'
+            },
+            'Shell': {
+                name: 'Shell GO+',
+                earn: '1 pt per litre (FuelSave), 1.2 pts (V-Power)',
+                redeem: '300 Shell GO+ Points = $10 Instant Off'
+            },
+            'SPC': {
+                name: 'SPC Membership',
+                earn: 'Spend-based Membership Rewards',
+                redeem: 'Varies by coupon; common: $5 off $60 fuel'
+            },
+            'Caltex': {
+                name: 'Link Rewards',
+                earn: '2 Linkpoints per litre',
+                redeem: '100 Linkpoints = $1 off fuel'
+            },
+            'Sinopec': {
+                name: 'X Card Loyalty',
+                earn: '1–1.5 X Card points per litre',
+                redeem: '90 X Card points = $3 off fuel'
+            }
+        };
+
         // Formatted date string
         const date = new Date(data.updatedAt);
         const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
@@ -107,6 +135,25 @@ document.addEventListener('DOMContentLoaded', async () => {
                             infoEl.classList.add('loyalty-discount-info');
                             infoEl.textContent = loyaltyLabels[p.brand];
                             container.appendChild(infoEl);
+
+                            // Tooltip for loyalty program details
+                            const details = loyaltyProgramDetails[p.brand];
+                            if (details) {
+                                const tooltip = document.createElement('div');
+                                tooltip.classList.add('loyalty-tooltip');
+                                tooltip.innerHTML = `
+                                    <span class="tooltip-title">${details.name}</span>
+                                    <div class="tooltip-row">
+                                        <span class="tooltip-label">Earn Rate:</span>
+                                        <span>${details.earn}</span>
+                                    </div>
+                                    <div class="tooltip-row">
+                                        <span class="tooltip-label">Rewards:</span>
+                                        <span>${details.redeem}</span>
+                                    </div>
+                                `;
+                                container.appendChild(tooltip);
+                            }
                         }
 
                         td.appendChild(container);

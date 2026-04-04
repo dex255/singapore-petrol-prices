@@ -232,6 +232,72 @@ input:checked + .slider:before {
   transform: translateX(22px);
 }
 
+/* ── Tooltip System ── */
+.price-container {
+  position: relative;
+  cursor: help;
+}
+
+.loyalty-tooltip {
+  visibility: hidden;
+  width: 240px;
+  background-color: #1e293b;
+  color: #fff;
+  text-align: left;
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  position: absolute;
+  z-index: 100;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  box-shadow: var(--shadow-lg);
+  pointer-events: none;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.loyalty-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #1e293b transparent transparent transparent;
+}
+
+.price-container:hover .loyalty-tooltip {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(-5px);
+}
+
+.tooltip-title {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 4px;
+}
+
+.tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.tooltip-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
 /* ── Discount Display ── */
 .price-container {
   display: flex;
