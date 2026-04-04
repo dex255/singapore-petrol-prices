@@ -27,14 +27,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             // Find minimum price in this row
             const validPrices = brands
-                .map(b => parseFloat(row[b]))
+                .map(b => {
+                    const val = row[b];
+                    return (val && val !== '-') ? parseFloat(val.replace('$', '')) : NaN;
+                })
                 .filter(p => !isNaN(p));
             const minPrice = validPrices.length > 0 ? Math.min(...validPrices) : null;
 
             brands.forEach(brand => {
                 const td = document.createElement('td');
                 const priceStr = row[brand];
-                const priceNum = parseFloat(priceStr);
+                const priceNum = (priceStr && priceStr !== '-') ? parseFloat(priceStr.replace('$', '')) : NaN;
 
                 if (!priceStr || priceStr === '-') {
                     td.textContent = 'N/A';
