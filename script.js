@@ -23,14 +23,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             tr.appendChild(tdGrade);
 
             // Brand cells
-            ['Esso', 'Shell', 'SPC', 'Caltex', 'Sinopec'].forEach(brand => {
+            const brands = ['Esso', 'Shell', 'SPC', 'Caltex', 'Sinopec'];
+            
+            // Find minimum price in this row
+            const validPrices = brands
+                .map(b => parseFloat(row[b]))
+                .filter(p => !isNaN(p));
+            const minPrice = validPrices.length > 0 ? Math.min(...validPrices) : null;
+
+            brands.forEach(brand => {
                 const td = document.createElement('td');
-                const price = row[brand];
-                if (!price || price === '-') {
+                const priceStr = row[brand];
+                const priceNum = parseFloat(priceStr);
+
+                if (!priceStr || priceStr === '-') {
                     td.textContent = 'N/A';
                     td.classList.add('price-null');
                 } else {
-                    td.textContent = price;
+                    td.textContent = priceStr;
+                    if (minPrice !== null && priceNum === minPrice) {
+                        td.classList.add('price-cheapest');
+                    }
                 }
                 tr.appendChild(td);
             });
