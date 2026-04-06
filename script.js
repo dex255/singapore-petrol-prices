@@ -279,6 +279,92 @@ document.addEventListener('DOMContentLoaded', async () => {
                 updateTrendChart(currentGrade, parseInt(e.target.value));
             });
         }
+
+        // Update FAQ dynamic prices
+        const updateFAQs = () => {
+            const grades = [
+                { grade: '95', id: 'faq-95-price', name: 'grade 95 petrol' },
+                { grade: 'Diesel', id: 'faq-diesel-price', name: 'diesel' },
+                { grade: 'Premium', id: 'faq-premium-price', name: 'premium petrol' }
+            ];
+
+            grades.forEach(({ grade, id, name }) => {
+                const row = data.prices.find(p => p.grade === grade);
+                const el = document.getElementById(id);
+                if (row && el) {
+                    const prices = ['Esso', 'Shell', 'SPC', 'Caltex', 'Sinopec']
+                        .map(b => row[b])
+                        .filter(p => p && p !== '-')
+                        .map(p => parseFloat(p.replace('$', '')));
+                    
+                    if (prices.length > 0) {
+                        const min = Math.min(...prices).toFixed(2);
+                        const max = Math.max(...prices).toFixed(2);
+                        if (min === max) {
+                            el.innerHTML = `The current price for ${name} is <strong>$${min}</strong> per litre.`;
+                        } else {
+                            el.innerHTML = `The current price for ${name} ranges from <strong>$${min}</strong> to <strong>$${max}</strong> per litre across major stations.`;
+                        }
+                    } else {
+                        el.innerHTML = `Data for ${name} is currently unavailable.`;
+                    }
+                }
+            });
+
+            // Overall cheapest
+            let overallCheapestGrade = '';
+            let overallCheapestPrice = Infinity;
+            
+            data.prices.forEach(row => {
+                if (row.grade !== 'Diesel' && row.grade !== 'Premium') {
+                    const prices = ['Esso', 'Shell', 'SPC', 'Caltex', 'Sinopec']
+                        .map(b => row[b])
+                        .filter(p => p && p !== '-')
+                        .map(p => parseFloat(p.replace('$', '')));
+                    
+                    if (prices.length > 0) {
+                        const min = Math.min(...prices);
+                        if (min < overallCheapestPrice) {
+                            overallCheapestPrice = min;
+                            overallCheapestGrade = row.grade;
+                        }
+                    }
+                }
+            });
+            
+            const cheapestEl = document.getElementById('faq-cheapest-overall');
+            if (cheapestEl && overallCheapestPrice !== Infinity) {
+                cheapestEl.innerHTML = `The cheapest petrol grade available today is <strong>Grade ${overallCheapestGrade}</strong> starting at <strong>$${overallCheapestPrice.toFixed(2)}</strong> per litre.`;
+            }
+
+            // Grade 98 specific
+            const row98 = data.prices.find(p => p.grade === '98');
+            const el98 = document.getElementById('faq-98-cheapest');
+            if (row98 && el98) {
+                let minPrice98 = Infinity;
+                let cheapestBrands98 = [];
+                
+                ['Esso', 'Shell', 'SPC', 'Caltex', 'Sinopec'].forEach(b => {
+                    const priceStr = row98[b];
+                    if (priceStr && priceStr !== '-') {
+                        const price = parseFloat(priceStr.replace('$', ''));
+                        if (price < minPrice98) {
+                            minPrice98 = price;
+                            cheapestBrands98 = [b];
+                        } else if (price === minPrice98) {
+                            cheapestBrands98.push(b);
+                        }
+                    }
+                });
+                
+                if (minPrice98 !== Infinity) {
+                    const brandsStr = cheapestBrands98.join(' and ');
+                    el98.innerHTML = `For Grade 98, the lowest price is <strong>$${minPrice98.toFixed(2)}</strong> per litre, currently offered by <strong>${brandsStr}</strong>.`;
+                }
+            }
+        };
+        updateFAQs();
+
     } catch (error) {
         console.error('Error loading prices:', error);
         document.getElementById('updated-date').textContent = 'Error loading data. Please try again later.';
