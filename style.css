@@ -195,6 +195,10 @@ th:last-child, td:last-child {
   border-color: rgba(255, 255, 255, 0.4);
 }
 
+.loyalty-info, .loyalty-icon, .loyalty-label, .switch, .slider {
+  pointer-events: none;
+}
+
 .loyalty-info {
   display: flex;
   align-items: center;

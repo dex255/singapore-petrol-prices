@@ -169,7 +169,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderPriceTable();
 
         // Toggle listener
-        loyaltyToggle.addEventListener('change', renderPriceTable);
+        const loyaltyContainer = document.getElementById('loyalty-toggle-container');
+        loyaltyContainer.addEventListener('click', () => {
+            loyaltyToggle.checked = !loyaltyToggle.checked;
+            renderPriceTable();
+        });
+
+        loyaltyToggle.addEventListener('change', (e) => {
+            e.stopPropagation(); // Prevent double trigger if container click also fired
+            renderPriceTable();
+        });
 
         // Render Trend Chart
         if (data.trends) {
