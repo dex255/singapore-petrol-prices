@@ -173,11 +173,19 @@ th:last-child, td:last-child {
   align-items: center;
   gap: 10px;
   background: rgba(255, 255, 255, 0.1);
-  padding: 8px 16px;
+  padding: 12px 20px;
   border-radius: 30px;
   margin-top: 12px;
   width: fit-content;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s;
+}
+
+.loyalty-controls:active {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .loyalty-label {
