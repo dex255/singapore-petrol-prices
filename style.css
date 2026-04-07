@@ -351,7 +351,7 @@ input:checked + .slider:before {
   cursor: help;
 }
 
-.loyalty-tooltip {
+#global-loyalty-tooltip {
   visibility: hidden;
   width: 240px;
   background-color: #1e293b;
@@ -361,11 +361,10 @@ input:checked + .slider:before {
   padding: 12px;
   position: absolute;
   z-index: 9999;
-  top: 125%; /* Show below to avoid clipping at the top of the table */
-  left: 50%;
-  transform: translateX(-50%);
+  /* Top and Left are calculated dynamically in JS */
+  transform: translateX(-50%) translateY(-5px); /* Start slightly offset */
   opacity: 0;
-  transition: opacity 0.3s, transform 0.3s;
+  transition: opacity 0.2s, transform 0.2s;
   box-shadow: var(--shadow-lg);
   pointer-events: none;
   font-size: 0.75rem;
@@ -373,7 +372,13 @@ input:checked + .slider:before {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.loyalty-tooltip::after {
+#global-loyalty-tooltip.visible {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+#global-loyalty-tooltip::after {
   content: "";
   position: absolute;
   bottom: 100%; /* Arrow points up */
@@ -382,12 +387,6 @@ input:checked + .slider:before {
   border-width: 5px;
   border-style: solid;
   border-color: transparent transparent #1e293b transparent;
-}
-
-.price-container:hover .loyalty-tooltip {
-  visibility: visible;
-  opacity: 1;
-  transform: translateX(-50%) translateY(5px);
 }
 
 .tooltip-title {

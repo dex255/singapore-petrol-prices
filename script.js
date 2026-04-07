@@ -68,6 +68,35 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         };
 
+        const globalTooltip = document.getElementById('global-loyalty-tooltip');
+        
+        const showGlobalTooltip = (e) => {
+            const el = e.currentTarget;
+            if (!globalTooltip) return;
+            
+            globalTooltip.innerHTML = `
+                <span class="tooltip-title">${el.dataset.brandname}</span>
+                <div class="tooltip-row">
+                    <span class="tooltip-label">Earn Rate:</span>
+                    <span>${el.dataset.earn}</span>
+                </div>
+                <div class="tooltip-row">
+                    <span class="tooltip-label">Rewards:</span>
+                    <span>${el.dataset.redeem}</span>
+                </div>
+            `;
+            
+            const rect = el.getBoundingClientRect();
+            globalTooltip.style.left = (rect.left + rect.width / 2 + window.scrollX) + 'px';
+            globalTooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+            
+            globalTooltip.classList.add('visible');
+        };
+
+        const hideGlobalTooltip = () => {
+            if (globalTooltip) globalTooltip.classList.remove('visible');
+        };
+
         // Formatted date string
         const date = new Date(data.updatedAt);
         const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
@@ -145,23 +174,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                             detailsEl.appendChild(infoEl);
                             container.appendChild(detailsEl);
 
-                            // Tooltip for loyalty program details
+                            // Setup Global Tooltip Trigger
                             const details = loyaltyProgramDetails[p.brand];
                             if (details) {
-                                const tooltip = document.createElement('div');
-                                tooltip.classList.add('loyalty-tooltip');
-                                tooltip.innerHTML = `
-                                    <span class="tooltip-title">${details.name}</span>
-                                    <div class="tooltip-row">
-                                        <span class="tooltip-label">Earn Rate:</span>
-                                        <span>${details.earn}</span>
-                                    </div>
-                                    <div class="tooltip-row">
-                                        <span class="tooltip-label">Rewards:</span>
-                                        <span>${details.redeem}</span>
-                                    </div>
-                                `;
-                                container.appendChild(tooltip);
+                                container.dataset.brandname = details.name;
+                                container.dataset.earn = details.earn;
+                                container.dataset.redeem = details.redeem;
+                                
+                                container.addEventListener('mouseenter', showGlobalTooltip);
+                                container.addEventListener('mouseleave', hideGlobalTooltip);
                             }
                         }
 
