@@ -181,27 +181,24 @@ th:last-child, td:last-child {
 }
 
 .price-cheapest {
-  color: #059669; /* Emerald 600 */
+  color: var(--text-main); /* Keep font black as requested */
   font-weight: 800;
+  text-decoration: underline; /* Add underline to distinguish cheapest if not using colors */
 }
 
 .pump-price {
   font-weight: 600;
+  color: var(--text-main); /* Ensure price itself stays black */
 }
 
-.price-increase {
-  color: #dc2626 !important; /* Red 600 */
-  font-weight: 900 !important;
+.price-increase .price-change-pct {
+  color: #dc2626 !important; /* Bold Red for % only */
+  font-weight: 800;
 }
 
-.price-decrease {
-  color: #16a34a !important; /* Green 600 */
-  font-weight: 900 !important;
-}
-
-.price-increase .price-change-pct,
 .price-decrease .price-change-pct {
-  font-weight: 700;
+  color: #16a34a !important; /* Bold Green for % only */
+  font-weight: 800;
 }
 
 .price-change-pct {
