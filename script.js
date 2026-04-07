@@ -126,15 +126,24 @@ document.addEventListener('DOMContentLoaded', async () => {
                         container.appendChild(priceEl);
 
                         if (isLoyaltyEnabled) {
-                            const originalEl = document.createElement('div');
+                            const detailsEl = document.createElement('div');
+                            detailsEl.classList.add('price-details');
+
+                            const originalEl = document.createElement('span');
                             originalEl.classList.add('original-price');
                             originalEl.textContent = `$${p.original.toFixed(2)}`;
-                            container.appendChild(originalEl);
+                            detailsEl.appendChild(originalEl);
 
-                            const infoEl = document.createElement('div');
+                            const infoEl = document.createElement('span');
                             infoEl.classList.add('loyalty-discount-info');
-                            infoEl.textContent = loyaltyLabels[p.brand];
-                            container.appendChild(infoEl);
+                            
+                            // Shorten labels on mobile or standard to fit
+                            let label = loyaltyLabels[p.brand];
+                            if (label.includes('Points')) label = label.replace('Points', 'Pts');
+                            infoEl.textContent = label;
+                            
+                            detailsEl.appendChild(infoEl);
+                            container.appendChild(detailsEl);
 
                             // Tooltip for loyalty program details
                             const details = loyaltyProgramDetails[p.brand];

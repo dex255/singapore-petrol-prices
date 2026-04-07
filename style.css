@@ -416,21 +416,36 @@ input:checked + .slider:before {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  justify-content: center;
+  min-height: 44px; /* Maintain table cell height seamlessly */
+}
+
+.price-details {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 3px;
+  flex-wrap: wrap; /* Prevent blowing out table widths */
 }
 
 .original-price {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   color: var(--text-muted);
   text-decoration: line-through;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .loyalty-discount-info {
-  font-size: 0.65rem;
+  font-size: 0.55rem;
   color: #059669;
-  font-weight: 600;
-  margin-top: 2px;
+  background: #dcfce7;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 /* ── Brand Logos ── */
