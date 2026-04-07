@@ -45,7 +45,7 @@ body {
 
 .petrol-widget > *:first-child {
   border-radius: var(--radius) var(--radius) 0 0;
-  overflow: hidden; /* Local clip for the header area top corners */
+  /* overflow: hidden removed to allow tooltips to show below header */
 }
 
 /* ── Header ── */
@@ -70,6 +70,7 @@ body {
   overflow: hidden; /* Handle decorative circle clipping */
   pointer-events: none;
   z-index: 0;
+  border-radius: var(--radius) var(--radius) 0 0; /* Keep top corners rounded */
 }
 
 .header-circle-1 {
