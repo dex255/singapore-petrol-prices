@@ -175,6 +175,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             renderPriceTable();
         });
 
+        const infoTooltip = document.querySelector('.info-tooltip-container');
+        if (infoTooltip) {
+            infoTooltip.addEventListener('click', (e) => {
+                e.stopPropagation(); // Don't toggle the button when clicking the info icon
+            });
+        }
+
         loyaltyToggle.addEventListener('change', (e) => {
             e.stopPropagation(); // Prevent double trigger if container click also fired
             renderPriceTable();

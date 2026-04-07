@@ -218,6 +218,65 @@ th:last-child, td:last-child {
   filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.4));
 }
 
+.info-tooltip-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  pointer-events: auto; /* Enable hover for the tooltip icon */
+  cursor: help;
+}
+
+.info-icon {
+  width: 14px;
+  height: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 0.2s;
+}
+
+.info-tooltip-container:hover .info-icon {
+  color: white;
+}
+
+.info-tooltip-text {
+  visibility: hidden;
+  width: 220px;
+  background-color: #1e293b;
+  color: #fff;
+  text-align: left;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  position: absolute;
+  z-index: 10000;
+  bottom: 150%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.4);
+  font-size: 0.7rem;
+  line-height: 1.5;
+  font-weight: 400;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -6px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: #1e293b transparent transparent transparent;
+}
+
+.info-tooltip-container:hover .info-tooltip-text {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 .loyalty-label {
   font-size: 0.8rem;
   color: white;
