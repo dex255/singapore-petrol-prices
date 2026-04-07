@@ -64,6 +64,8 @@ body {
   height: 160px;
   border-radius: 50%;
   background: rgba(255,255,255,0.06);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .widget-header::after {
@@ -75,6 +77,8 @@ body {
   height: 200px;
   border-radius: 50%;
   background: rgba(255,255,255,0.04);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .widget-header h1 {
@@ -186,6 +190,8 @@ th:last-child, td:last-child {
   -webkit-tap-highlight-color: transparent;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 10;
 }
 
 .loyalty-controls:hover {
