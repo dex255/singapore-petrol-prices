@@ -185,6 +185,24 @@ th:last-child, td:last-child {
   font-weight: 700;
 }
 
+.price-increase {
+  color: #dc2626 !important;
+  font-weight: 700 !important;
+}
+
+.price-decrease {
+  color: #16a34a !important;
+  font-weight: 700 !important;
+}
+
+.price-change-pct {
+  font-size: 0.65rem;
+  margin-left: 4px;
+  font-weight: 500;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 /* ── Loyalty Toggle ── */
 .loyalty-controls {
   display: flex;

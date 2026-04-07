@@ -130,8 +130,25 @@ document.addEventListener('DOMContentLoaded', async () => {
                         const discount = getLoyaltyDiscount(brand, row.grade, originalPrice);
                         displayPrice = originalPrice - discount;
                     }
+
+                    // Calculate price change percentage from trends
+                    const gradeTrends = data.trends[row.grade] || [];
+                    const brandTrend = gradeTrends.find(t => t.name.toLowerCase() === brand.toLowerCase());
+                    let changePct = 0;
+                    if (brandTrend && brandTrend.data.length >= 2) {
+                        const prevPrice = brandTrend.data[brandTrend.data.length - 2][1];
+                        if (prevPrice > 0) {
+                            changePct = ((originalPrice - prevPrice) / prevPrice) * 100;
+                        }
+                    }
                     
-                    return { brand, original: originalPrice, display: parseFloat(displayPrice.toFixed(3)), isNull: false };
+                    return { 
+                        brand, 
+                        original: originalPrice, 
+                        display: parseFloat(displayPrice.toFixed(3)), 
+                        isNull: false,
+                        changePct: changePct 
+                    };
                 });
 
                 const validDisplayPrices = processedPrices.filter(p => !p.isNull).map(p => p.display);
@@ -149,6 +166,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                         const priceEl = document.createElement('div');
                         priceEl.textContent = `$${p.display.toFixed(2)}`;
+                        
+                        // Apply change indicators
+                        if (p.changePct > 0.001) { // Floating point safety
+                            priceEl.classList.add('price-increase');
+                            const changeSpan = document.createElement('span');
+                            changeSpan.classList.add('price-change-pct');
+                            changeSpan.textContent = `+${p.changePct.toFixed(1)}%`;
+                            priceEl.appendChild(changeSpan);
+                        } else if (p.changePct < -0.001) {
+                            priceEl.classList.add('price-decrease');
+                            const changeSpan = document.createElement('span');
+                            changeSpan.classList.add('price-change-pct');
+                            changeSpan.textContent = `${p.changePct.toFixed(1)}%`;
+                            priceEl.appendChild(changeSpan);
+                        }
+
                         if (minPrice !== null && p.display === minPrice) {
                             td.classList.add('price-cheapest');
                         }
