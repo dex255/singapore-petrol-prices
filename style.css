@@ -181,26 +181,35 @@ th:last-child, td:last-child {
 }
 
 .price-cheapest {
-  color: #16a34a; /* Green 600 */
-  font-weight: 700;
+  color: #059669; /* Emerald 600 */
+  font-weight: 800;
+}
+
+.pump-price {
+  font-weight: 600;
 }
 
 .price-increase {
-  color: #dc2626 !important;
-  font-weight: 700 !important;
+  color: #dc2626 !important; /* Red 600 */
+  font-weight: 900 !important;
 }
 
 .price-decrease {
-  color: #16a34a !important;
-  font-weight: 700 !important;
+  color: #16a34a !important; /* Green 600 */
+  font-weight: 900 !important;
+}
+
+.price-increase .price-change-pct,
+.price-decrease .price-change-pct {
+  font-weight: 700;
 }
 
 .price-change-pct {
   font-size: 0.65rem;
-  margin-left: 4px;
-  font-weight: 500;
+  margin-left: 2px;
   display: inline-block;
-  vertical-align: middle;
+  vertical-align: baseline;
+  letter-spacing: -0.01em;
 }
 
 /* ── Loyalty Toggle ── */

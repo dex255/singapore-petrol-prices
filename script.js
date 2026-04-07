@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
 
                     // Calculate price change percentage from trends
-                    const gradeTrends = data.trends[row.grade] || [];
+                    const gradeTrends = data.trends[row.grade] || data.trends[row.grade.toLowerCase()] || [];
                     const brandTrend = gradeTrends.find(t => t.name.toLowerCase() === brand.toLowerCase());
                     let changePct = 0;
                     if (brandTrend && brandTrend.data.length >= 2) {
@@ -165,20 +165,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                         container.classList.add('price-container');
 
                         const priceEl = document.createElement('div');
+                        priceEl.classList.add('pump-price');
                         priceEl.textContent = `$${p.display.toFixed(2)}`;
                         
                         // Apply change indicators
                         if (p.changePct > 0.001) { // Floating point safety
                             priceEl.classList.add('price-increase');
                             const changeSpan = document.createElement('span');
-                            changeSpan.classList.add('price-change-pct');
-                            changeSpan.textContent = `+${p.changePct.toFixed(1)}%`;
+                            changeSpan.classList.add('price-change-pct', 'increase');
+                            changeSpan.textContent = `(+${p.changePct.toFixed(1)}%)`;
                             priceEl.appendChild(changeSpan);
                         } else if (p.changePct < -0.001) {
                             priceEl.classList.add('price-decrease');
                             const changeSpan = document.createElement('span');
-                            changeSpan.classList.add('price-change-pct');
-                            changeSpan.textContent = `${p.changePct.toFixed(1)}%`;
+                            changeSpan.classList.add('price-change-pct', 'decrease');
+                            changeSpan.textContent = `(${p.changePct.toFixed(1)}%)`;
                             priceEl.appendChild(changeSpan);
                         }
 
