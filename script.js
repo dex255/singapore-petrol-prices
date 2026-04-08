@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                         // In untoggled state: show comparison tooltip on hover
                         if (!isLoyaltyEnabled && p.prevDataDate) {
-                            container.dataset.priceTooltip = `Compared to 1 hour ago`;
+                            container.dataset.priceTooltip = `Compared to 1 day ago`;
                             container.addEventListener('mouseenter', showPriceTooltip);
                             container.addEventListener('mouseleave', hidePriceTooltip);
                             container.style.cursor = 'help';
