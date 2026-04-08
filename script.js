@@ -97,6 +97,30 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (globalTooltip) globalTooltip.classList.remove('visible');
         };
 
+        // Price comparison tooltip (untoggled state)
+        let priceTooltipEl = document.getElementById('global-price-tooltip');
+        if (!priceTooltipEl) {
+            priceTooltipEl = document.createElement('div');
+            priceTooltipEl.id = 'global-price-tooltip';
+            document.body.appendChild(priceTooltipEl);
+        }
+
+        const showPriceTooltip = (e) => {
+            const el = e.currentTarget;
+            const text = el.dataset.priceTooltip;
+            if (!text) return;
+
+            priceTooltipEl.textContent = text;
+            const rect = el.getBoundingClientRect();
+            priceTooltipEl.style.left = (rect.left + rect.width / 2 + window.scrollX) + 'px';
+            priceTooltipEl.style.top = (rect.bottom + window.scrollY + 8) + 'px';
+            priceTooltipEl.classList.add('visible');
+        };
+
+        const hidePriceTooltip = () => {
+            priceTooltipEl.classList.remove('visible');
+        };
+
         // Formatted date string
         const date = new Date(data.updatedAt);
         const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
@@ -135,8 +159,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const gradeTrends = data.trends[row.grade] || data.trends[row.grade.toLowerCase()] || [];
                     const brandTrend = gradeTrends.find(t => t.name.toLowerCase() === brand.toLowerCase());
                     let changePct = 0;
+                    let prevDataDate = null;
                     if (brandTrend && brandTrend.data.length >= 2) {
-                        const prevPrice = brandTrend.data[brandTrend.data.length - 2][1];
+                        const prevEntry = brandTrend.data[brandTrend.data.length - 2];
+                        const prevPrice = prevEntry[1];
+                        prevDataDate = prevEntry[0]; // date string of previous data point
                         if (prevPrice > 0) {
                             changePct = ((originalPrice - prevPrice) / prevPrice) * 100;
                         }
@@ -147,7 +174,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         original: originalPrice, 
                         display: parseFloat(displayPrice.toFixed(3)), 
                         isNull: false,
-                        changePct: changePct 
+                        changePct: changePct,
+                        prevDataDate: prevDataDate
                     };
                 });
 
@@ -186,6 +214,25 @@ document.addEventListener('DOMContentLoaded', async () => {
                         }
 
                         // No cheapest highlighting per user request
+
+                        // In untoggled state: show comparison tooltip on hover
+                        if (!isLoyaltyEnabled && p.prevDataDate) {
+                            const prevDate = new Date(p.prevDataDate);
+                            const nowDate = new Date(data.updatedAt);
+                            const diffMs = nowDate - prevDate;
+                            const diffHours = Math.round(diffMs / (1000 * 60 * 60));
+                            const diffDays = Math.floor(diffHours / 24);
+                            let timeLabel;
+                            if (diffHours < 24) {
+                                timeLabel = `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+                            } else {
+                                timeLabel = `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+                            }
+                            container.dataset.priceTooltip = `Compared to ${timeLabel} (when data was last updated)`;
+                            container.addEventListener('mouseenter', showPriceTooltip);
+                            container.addEventListener('mouseleave', hidePriceTooltip);
+                            container.style.cursor = 'help';
+                        }
 
                         if (isLoyaltyEnabled) {
                             const detailsEl = document.createElement('div');
