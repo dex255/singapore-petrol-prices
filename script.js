@@ -221,14 +221,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                             const nowDate = new Date(data.updatedAt);
                             const diffMs = nowDate - prevDate;
                             const diffHours = Math.round(diffMs / (1000 * 60 * 60));
-                            const diffDays = Math.floor(diffHours / 24);
-                            let timeLabel;
-                            if (diffHours < 24) {
-                                timeLabel = `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
-                            } else {
-                                timeLabel = `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
-                            }
-                            container.dataset.priceTooltip = `Compared to ${timeLabel} (when data was last updated)`;
+                            
+                            const timeLabel = `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+                            container.dataset.priceTooltip = `Compared to ${timeLabel}`;
                             container.addEventListener('mouseenter', showPriceTooltip);
                             container.addEventListener('mouseleave', hidePriceTooltip);
                             container.style.cursor = 'help';
