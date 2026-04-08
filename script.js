@@ -168,25 +168,27 @@ document.addEventListener('DOMContentLoaded', async () => {
                         priceEl.classList.add('pump-price');
                         priceEl.textContent = `$${p.display.toFixed(2)}`;
                         
-                        // Apply change indicators
-                        if (p.changePct > 0.001) { // Floating point safety
-                            priceEl.classList.add('price-increase');
-                            const changeSpan = document.createElement('span');
-                            changeSpan.classList.add('price-change-pct', 'increase');
-                            changeSpan.textContent = `(+${p.changePct.toFixed(1)}%)`;
-                            priceEl.appendChild(changeSpan);
+                        // Apply change indicators as a SEPARATE sibling element
+                        if (p.changePct > 0.001) {
+                            const changeSpan = document.createElement('div');
+                            changeSpan.classList.add('price-change-pct', 'price-change-up');
+                            changeSpan.textContent = `▲ +${p.changePct.toFixed(1)}%`;
+                            container.appendChild(priceEl);
+                            container.appendChild(changeSpan);
                         } else if (p.changePct < -0.001) {
-                            priceEl.classList.add('price-decrease');
-                            const changeSpan = document.createElement('span');
-                            changeSpan.classList.add('price-change-pct', 'decrease');
-                            changeSpan.textContent = `(${p.changePct.toFixed(1)}%)`;
-                            priceEl.appendChild(changeSpan);
+                            const changeSpan = document.createElement('div');
+                            changeSpan.classList.add('price-change-pct', 'price-change-down');
+                            changeSpan.textContent = `▼ ${p.changePct.toFixed(1)}%`;
+                            container.appendChild(priceEl);
+                            container.appendChild(changeSpan);
+                        } else {
+                            container.appendChild(priceEl);
                         }
 
                         if (minPrice !== null && p.display === minPrice) {
                             td.classList.add('price-cheapest');
                         }
-                        container.appendChild(priceEl);
+                        // priceEl already appended above in change indicator logic
 
                         if (isLoyaltyEnabled) {
                             const detailsEl = document.createElement('div');

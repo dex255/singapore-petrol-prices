@@ -188,25 +188,23 @@ th:last-child, td:last-child {
 
 .pump-price {
   font-weight: 600;
-  color: var(--text-main); /* Ensure price itself stays black */
-}
-
-.price-increase .price-change-pct {
-  color: #dc2626 !important; /* Bold Red for % only */
-  font-weight: 800;
-}
-
-.price-decrease .price-change-pct {
-  color: #16a34a !important; /* Bold Green for % only */
-  font-weight: 800;
+  color: var(--text-main);
 }
 
 .price-change-pct {
-  font-size: 0.65rem;
-  margin-left: 2px;
-  display: inline-block;
-  vertical-align: baseline;
-  letter-spacing: -0.01em;
+  font-size: 0.62rem;
+  font-weight: 700;
+  margin-top: 1px;
+  display: block;
+  letter-spacing: 0.01em;
+}
+
+.price-change-up {
+  color: #dc2626; /* Red for increase */
+}
+
+.price-change-down {
+  color: #16a34a; /* Green for decrease */
 }
 
 /* ── Loyalty Toggle ── */
