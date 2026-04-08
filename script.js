@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
 
                 const validDisplayPrices = processedPrices.filter(p => !p.isNull).map(p => p.display);
-                const minPrice = validDisplayPrices.length > 0 ? Math.min(...validDisplayPrices) : null;
+                // (cheapest highlighting removed per user request)
 
                 processedPrices.forEach((p, idx) => {
                     const td = document.createElement('td');
@@ -185,10 +185,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             container.appendChild(priceEl);
                         }
 
-                        if (minPrice !== null && p.display === minPrice) {
-                            td.classList.add('price-cheapest');
-                        }
-                        // priceEl already appended above in change indicator logic
+                        // No cheapest highlighting per user request
 
                         if (isLoyaltyEnabled) {
                             const detailsEl = document.createElement('div');

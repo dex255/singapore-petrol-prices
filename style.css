@@ -180,10 +180,6 @@ th:last-child, td:last-child {
   font-size: 0.85rem;
 }
 
-.price-cheapest {
-  background: #f0fdf4;
-  border-radius: 6px;
-}
 
 .pump-price {
   font-weight: 600;
