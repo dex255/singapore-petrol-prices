@@ -217,13 +217,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                         // In untoggled state: show comparison tooltip on hover
                         if (!isLoyaltyEnabled && p.prevDataDate) {
-                            const prevDate = new Date(p.prevDataDate);
-                            const nowDate = new Date(data.updatedAt);
-                            const diffMs = nowDate - prevDate;
-                            const diffHours = Math.round(diffMs / (1000 * 60 * 60));
-                            
-                            const timeLabel = `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
-                            container.dataset.priceTooltip = `Compared to ${timeLabel}`;
+                            container.dataset.priceTooltip = `Compared to 1 hour ago`;
                             container.addEventListener('mouseenter', showPriceTooltip);
                             container.addEventListener('mouseleave', hidePriceTooltip);
                             container.style.cursor = 'help';
