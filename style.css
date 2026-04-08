@@ -202,6 +202,10 @@ th:last-child, td:last-child {
   color: #16a34a; /* Green for decrease */
 }
 
+.price-change-none {
+  color: var(--text-muted); /* Gray for no change */
+}
+
 /* ── Loyalty Toggle ── */
 .loyalty-controls {
   display: flex;

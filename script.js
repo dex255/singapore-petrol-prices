@@ -210,7 +210,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                             container.appendChild(priceEl);
                             container.appendChild(changeSpan);
                         } else {
+                            const changeSpan = document.createElement('div');
+                            changeSpan.classList.add('price-change-pct', 'price-change-none');
+                            changeSpan.textContent = '-';
                             container.appendChild(priceEl);
+                            container.appendChild(changeSpan);
                         }
 
                         // No cheapest highlighting per user request
