@@ -1,8 +1,5 @@
 # Singapore Petrol Prices & Pump Comparison Tool
 
-[![Live Pricing](https://img.shields.io/badge/Live-Petrol_Prices-green.svg)](https://dex255.github.io/singapore-petrol-prices/)
-[![Automated Updates](https://github.com/dex255/singapore-petrol-prices/actions/workflows/update-prices.yml/badge.svg)](https://github.com/dex255/singapore-petrol-prices/actions)
-
 Welcome to the **Singapore Petrol Prices** tracker. This open-source repository provides a real-time, highly visual comparison of the latest fuel costs across all major petrol brands in Singapore: **Esso, Shell, SPC, Caltex, and Sinopec**. 
 
 By intelligently scraping and archiving pump prices daily, motorists are empowered to find the cheapest petrol today and track pricing trends over time.
@@ -13,7 +10,6 @@ By intelligently scraping and archiving pump prices daily, motorists are empower
 * **Loyalty Discount Estimator:** Seamlessly toggle "Loyalty Points Discounts" to view estimated net pump prices after base loyalty points and common tier credit card discounts are applied.
 * **Historical Trend Charts:** Analyze fuel price fluctuations with interactive charts. Filter by fuel grade (e.g., 95 Octane vs Diesel) and time horizons (Past 7 Days, 3 Months, 12 Months).
 * **Price Fluctuation Indicators:** Quickly spot overnight price drops (highlighted in bold green) and price hikes (highlighted in bold red).
-* **Automated Data Scraping:** Powered by GitHub Actions, our Node.js scraper (`scraper.js`) reliably pulls live petrol price data daily to ensure unparalleled accuracy.
 
 ## 🚀 How It Works
 
@@ -55,9 +51,6 @@ Want to run this petrol price tracker locally? It's simple!
    ```
    Navigate to `http://localhost:3000` to view the app!
 
-## 📈 SEO & Discoverability
-
-This tool is optimized to help drivers easily find the most accurate and up-to-date fuel cost data. Whether you are searching for "cheapest petrol in Singapore", "Shell vs Esso prices", or "Diesel price trends SG", our detailed JSON schemas and semantic HTML structure ensure high visibility and fast loading times on any device.
 
 ## 📝 Disclaimer
 
